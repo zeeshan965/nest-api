@@ -1,0 +1,16 @@
+-- Table: public.todo
+
+-- DROP TABLE IF EXISTS public.todo;
+
+CREATE TABLE IF NOT EXISTS public.todo
+(
+    id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+    name character varying(191) COLLATE pg_catalog."default" NOT NULL,
+    complete boolean NOT NULL DEFAULT false,
+    CONSTRAINT todo_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.todo
+    OWNER to postgres;
