@@ -1,21 +1,12 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-  Req,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req, } from '@nestjs/common';
 import { Request } from 'express';
-import { TodoInterface } from '../interface/TodoInterface';
-import { CreateTodoDto } from '../interface/CreateTodoDto';
-import { TodosService } from '../provider/TodosService';
+import { TodoInterface } from '../interface/todo.interface';
+import { CreateTodoDto } from '../interface/createTodoDto';
+import { TodoService } from '../provider/todo.service';
 
 @Controller('cats')
 export class TodosController {
-  constructor(private todosService: TodosService) {}
+  constructor(private todosService: TodoService) {}
 
   @Post()
   async create(@Body() createTodoDto: CreateTodoDto) {
