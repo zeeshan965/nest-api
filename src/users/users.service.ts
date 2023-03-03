@@ -1,17 +1,16 @@
-import { Injectable, HttpStatus } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Injectable, HttpStatus } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import { UsersEntity } from "./users.entity";
-import { UsersDTO } from "./users.dto";
+import { UsersEntity } from './users.entity';
+import { UsersDTO } from './users.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UsersEntity)
-    private usersRepository: Repository<UsersEntity>
-  ) {
-  }
+    private usersRepository: Repository<UsersEntity>,
+  ) {}
 
   async showAll() {
     return await this.usersRepository.find();
@@ -26,8 +25,8 @@ export class UsersService {
   async findByEmail(email: string): Promise<UsersDTO> {
     return await this.usersRepository.findOne({
       where: {
-        email: email
-      }
+        email: email,
+      },
     });
   }
 

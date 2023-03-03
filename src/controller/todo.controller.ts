@@ -1,16 +1,25 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Req, } from '@nestjs/common';
-import { Request } from 'express';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { TodoInterface } from '../interface/todo.interface';
 import { CreateTodoDto } from '../interface/createTodoDto';
 import { TodoService } from '../provider/todo.service';
+import { QueryFailedError } from 'typeorm';
 
 @Controller('cats')
 export class TodosController {
   constructor(private todosService: TodoService) {}
 
   @Post()
-  async create(@Body() createTodoDto: CreateTodoDto) {
-    const todo = await this.todosService.create(createTodoDto);
+  async create(@Body() data: CreateTodoDto) {
+    const todo = await this.todosService.create(data);
     if (!todo) {
       return 'error in creating todo';
     }
@@ -18,9 +27,28 @@ export class TodosController {
   }
 
   @Get()
-  async findAll(@Req() request: Request) {
-    const cats: Array<TodoInterface> = await this.todosService.findAll();
-    return cats;
+  async findAll() {
+    try {
+      const cats: Array<TodoInterface> = await this.todosService.findAll();
+      console.log(cats);
+      return cats;
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        return {
+          message: error.message.replaceAll('"', ''),
+        };
+      }
+    }
+  }
+
+  @Get(':id')
+  async readUser(@Param('id') id: number) {
+    const data = await this.todosService.read(id);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Todo fetched successfully',
+      data,
+    };
   }
 
   @Put(':id')
